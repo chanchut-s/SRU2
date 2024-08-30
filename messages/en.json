@@ -1,0 +1,24 @@
+{
+  "HomePage": {
+    "title": "Hello world!"
+  },
+  "cardProfile": {
+    "name": "Chanchut Savangpunt"
+  },
+  "Lecturer": {
+    "title": "Lecturer"
+  },
+  "staff": {
+    "title": "Staff"
+  },
+  "navbar": {
+    "home": "Home",
+    "about": "About us",
+    "personnel": "Personnel",
+    "lecturer": "Lecturer",
+    "staff": "Staff",
+    "event": "Event",
+    "news": "News",
+    "news1": "News"
+  }
+}
