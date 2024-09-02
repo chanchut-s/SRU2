@@ -14,16 +14,17 @@ import { Navigation, Pagination, Mousewheel, Keyboard, Autoplay } from 'swiper/m
 function SwiperHero() {
   return (
     <div className=''>
-        <Swiper
+      <Swiper
         navigation={true}
         loop={true}
         pagination={{
-            clickable: true,
-          }}
+          clickable: true,
+        }}
         autoplay={{
-            delay: 5000,
-            disableOnInteraction: false,
-          }}
+          delay: 5000,
+          disableOnInteraction: false,
+        }}
+        speed={2000}
         modules={[Navigation, Pagination, Mousewheel, Keyboard, Autoplay]}
         className="myUniqueSwiper"
       >

@@ -11,7 +11,7 @@ function Navbar() {
     const t = useTranslations('navbar')
 
     return (
-        <div className="navbar bg-base-100 sticky top-0 z-50 shadow-md">
+        <div className="navbar bg-white sticky top-0 z-50 shadow-md">
             <div className="navbar-start">
                 <div className='flex justify-start'>
                     <div className="drawer lg:hidden">
@@ -85,6 +85,7 @@ function Navbar() {
                             <li><a href={`/${locale}/news`}>{t("news1")}</a></li>
                         </ul>
                     </div>
+                    <a role="button" className="btn btn-ghost font-normal" href={`/${locale}/contact`}>{t("contact")}</a>
                 </div>
             </div>
             <div className="navbar-end">

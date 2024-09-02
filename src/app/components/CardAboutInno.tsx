@@ -8,7 +8,7 @@ interface CardAboutInnoProps {
 function CardAboutInno(a: CardAboutInnoProps) {
     return (
         <div className="group relative block">
-            <div className="relative flex h-full transform items-end bg-white transition-transform group-hover:-translate-x-2 group-hover:-translate-y-2 duration-500 group-hover:shadow-md group-hover:shadow-gray-700">
+            <div className="relative flex h-full transform items-end bg-white transition-transform group-hover:-translate-y-2 duration-500 group-hover:shadow-md group-hover:shadow-gray-700">
                 <div className="transition-opacity group-hover:absolute group-hover:opacity-0">
                     <img
                         src={a.image} alt=""

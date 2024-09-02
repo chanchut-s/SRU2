@@ -11,13 +11,13 @@ function CardProfile() {
                 <img
                     alt=""
                     src="https://images.unsplash.com/photo-1603871165848-0aa92c869fa1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=772&q=80"
-                    className="h-auto max-h-[30rem] w-full object-cover duration-500 group-hover:scale-110"
+                    className="h-auto max-h-[40rem] w-full object-cover duration-500 group-hover:scale-110"
                 />
-                <div className="absolute bottom-0 left-0 w-full h-[90px] bg-blue-900 bg-opacity-0 lg:bg-opacity-100  lg:translate-y-20 transform group-hover:translate-y-0 lg:group-hover:bg-opacity-100  lg:transition-all  lg:duration-500"></div>
-                <div className="absolute bottom-0 left-0 w-full h-[4rem] m-4">
+                <div className="absolute bottom-0 left-0 w-full h-[105px] bg-blue-900 bg-opacity-0 lg:bg-opacity-100  lg:translate-y-24 transform group-hover:translate-y-0 lg:group-hover:bg-opacity-100  lg:transition-all  lg:duration-500"></div>
+                <div className="absolute bottom-[3rem] left-0 w-full h-[4rem] p-4">
                     <div className="opacity-0 lg:opacity-100">
                         <p className="text-sm text-white">{t('name')}</p>
-                        <p className="text-sm text-white">email</p>
+                        <p className="text-sm text-white">xxxxxxx@gmail.com</p>
                         <p className="text-sm text-white">082299480</p>
                     </div>
                 </div>

@@ -21,6 +21,7 @@ const config: Config = {
       },
       screens: {
         'md-custom': '990px', // ตั้งค่า breakpoint ที่ 900px
+        'md-custom2': '500px'
       },
     },
   },

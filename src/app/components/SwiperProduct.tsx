@@ -33,7 +33,7 @@ export default function SwiperProduct() {
         pagination={{
           clickable: true,
         }}
-
+        speed={2000}
         modules={[Autoplay, Pagination]}
         className="mySwiper"
       >

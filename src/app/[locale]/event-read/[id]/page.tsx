@@ -1,9 +1,9 @@
-import CardNew from '@/app/components/CardNews'
+import CardEvent from '@/app/components/CardEvent'
 import Heading from '@/app/components/Heading'
 import { useLocale } from 'next-intl'
 import React from 'react'
 
-function NewsRead() {
+function EventRead() {
   const locale = useLocale()
 
   return (
@@ -13,7 +13,7 @@ function NewsRead() {
           <div className="breadcrumbs text-sm text-white">
             <ul>
               <li><a href={`/${locale}`}>Home</a></li>
-              <li><a href={`/${locale}/news`}>News</a></li>
+              <li><a href={`/${locale}/event`}>Event</a></li>
               <li>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum, quia.</li>
             </ul>
           </div>
@@ -31,13 +31,13 @@ function NewsRead() {
             <p className=''>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Earum, accusantium harum minus consequatur totam non ut quis, voluptas exercitationem suscipit tempore sit tenetur tempora saepe, voluptatem molestias quae deleniti. Omnis accusantium officiis qui blanditiis autem dolorem atque reprehenderit repellat reiciendis quidem, quis et delectus eos minus ad, dolores obcaecati laboriosam?</p>
           </div>
         </div>
-        <div className='mt-5 max-w-screen-xl'>
-          <h1 className='text-3xl sm:text-4xl text-blue-900'>ข่าวประชาสัมพันธ์ใหม่</h1>
+        <div className='mt-5 w-full max-w-screen-xl'>
+          <h1 className='text-3xl sm:text-4xl text-blue-900'>ข่าวกิจกรรมใหม่</h1>
           <div className='p-5 grid justify-items-center'>
             <div className='grid grid-cols-1 gap-8 md:gap-8 md:grid-cols-2 lg:grid-cols-3'>
-              <CardNew />
-              <CardNew />
-              <CardNew />
+              <CardEvent />
+              <CardEvent />
+              <CardEvent />
             </div>
           </div>
         </div>
@@ -46,4 +46,4 @@ function NewsRead() {
   )
 }
 
-export default NewsRead
+export default EventRead
