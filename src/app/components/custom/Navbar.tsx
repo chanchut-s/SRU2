@@ -53,6 +53,16 @@ function Navbar() {
                                         </ul>
                                     </details>
                                 </li>
+                                <li>
+                                    <details className="dropdown">
+                                        <summary>{t("news")}</summary>
+                                        <ul className="p-2 ">
+                                            <li><a href={`/${locale}/event`}>{t("event")}</a></li>
+                                            <li><a href={`/${locale}/news`}>{t("news1")}</a></li>
+                                        </ul>
+                                    </details>
+                                </li>
+                                <li><a href={`/${locale}/contact`}>{t("contact")}</a></li>
                             </ul>
                         </div>
                     </div>

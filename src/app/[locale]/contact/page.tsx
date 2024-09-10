@@ -11,7 +11,7 @@ function Contect() {
           <div className="breadcrumbs text-sm text-white">
             <ul>
               <li><a href={`/${locale}`}>Home</a></li>
-              <li>Vision</li>
+              <li>contact</li>
             </ul>
           </div>
         </div>
