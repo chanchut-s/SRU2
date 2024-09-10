@@ -30,7 +30,7 @@ function LocaleSwitcher() {
             <div tabIndex={0} role="button" className="btn">
                 {localAcitve.toUpperCase()}
             </div>
-            <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 mt-5 shadow">
+            <ul tabIndex={0} className="dropdown-content menu bg-white rounded-box z-[1] w-52 p-2 mt-5 shadow">
                 <li>
                     <a onClick={() => onSelectChange('th')} className={isPending ? 'disabled' : ''}>TH</a>
                 </li>
