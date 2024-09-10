@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useState } from 'react';
-import CardProduct from './CardProduct';
+import CardProduct from '../ui/CardProduct';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 

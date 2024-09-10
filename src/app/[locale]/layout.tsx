@@ -1,9 +1,9 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { Kanit } from '@next/font/google';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/custom/Navbar';
 import "./globals.css";
-import Footer from '../components/Footer';
+import Footer from '../components/custom/Footer';
 
 const kanit = Kanit({
   subsets: ['latin'], // เลือก subset ที่ต้องการ

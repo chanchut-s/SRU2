@@ -7,7 +7,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-import CardPartner from './CardPartner';
+import CardPartner from '../ui/CardPartner';
 
 function SwiperPartner() {
     return (

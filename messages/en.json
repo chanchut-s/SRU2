@@ -1,6 +1,14 @@
 {
   "HomePage": {
-    "title": "Hello world!"
+    "aboutInno": "AboutInno",
+    "ourServices": "Services",
+    "news": "News",
+    "events": "Events",
+    "partner": "Partner",
+    "vision": "Vision",
+    "history": "History",
+    "goals": "Goals",
+    "viewAll": "ViewAll"
   },
   "cardProfile": {
     "name": "Chanchut Savangpunt"
@@ -21,5 +29,15 @@
     "news": "News",
     "news1": "News",
     "contact": "Contact us"
+  },
+  "Event": {
+    "home": "Home",
+    "event": "Event",
+    "placeholder": "Search events..."
+  },
+  "News": {
+    "home": "Home",
+    "news": "News",
+    "placeholder": "Search news..."
   }
 }

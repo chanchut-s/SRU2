@@ -1,5 +1,5 @@
-import CardProfile from '@/app/components/CardProfile';
-import Heading from '@/app/components/Heading';
+import CardProfile from '@/app/components/ui/CardProfile';
+import Heading from '@/app/components/custom/Heading';
 import { useLocale, useTranslations } from 'next-intl';
 import React from 'react'
 
@@ -20,9 +20,9 @@ function Lecturer() {
         </div>
       </div>
       <Heading imgUrl={imgUrl} />
-      <div className='grid justify-center items-center mx-3 sm:mx-10 lg:mx-[4rem] -mt-[4rem] lg:-mt-[7rem] pb-5'>
+      <div className='flex justify-center items-center mx-3 sm:mx-10 lg:mx-[4rem] -mt-[4rem] lg:-mt-[7rem] pb-5'>
         <div className='bg-white relative w-full max-w-screen-xl shadow-xl'>
-          <div className="grid justify-center items-center p-[1rem] md:p-[2rem] space-y-4 md:space-y-8 ">
+          <div className="p-[1rem] md:p-[2rem] space-y-4 md:space-y-8 ">
             <h1 className='text-3xl sm:text-4xl lg:text-5xl text-blue-900'>{t("title")}</h1>
             <div className="grid grid-cols-1 gap-8 sm:gap-7 sm:grid-cols-2 lg:grid-cols-4">
               <CardProfile />

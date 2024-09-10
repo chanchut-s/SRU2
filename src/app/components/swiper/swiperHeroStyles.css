@@ -29,7 +29,7 @@
 
 .myUniqueSwiper .swiper-pagination {
   position: absolute;
-  top: 80%;
+  top: 78%;
   /* Adjust as needed */
   left: 50%;
   transform: translateX(-50%);

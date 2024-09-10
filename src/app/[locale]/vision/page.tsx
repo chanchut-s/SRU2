@@ -1,4 +1,4 @@
-import Heading from '@/app/components/Heading'
+import Heading from '@/app/components/custom/Heading'
 import { useLocale } from 'next-intl'
 import React from 'react'
 
