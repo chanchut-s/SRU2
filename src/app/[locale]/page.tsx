@@ -34,8 +34,8 @@ export default async function Home({ params: { locale } }: { params: { locale: s
   const blogData = await getBlogData();
   const events = blogData.data.attributes.blog_events.data;
   const publicities = blogData.data.attributes.blog_publicities.data;
-  const imageUrl = "https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
- 
+  const imageUrl = "https://plus.unsplash.com/premium_photo-1725400826922-39ffcf68f736?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+
   return (
     <div className="bg-gray-100">
       <div className="relative z-0">
@@ -46,9 +46,20 @@ export default async function Home({ params: { locale } }: { params: { locale: s
           <h1 className="text-2xl sm:text-4xl text-blue-900 font-bold text-center pt-[1rem]">{t('aboutInno')}</h1>
 
           <div className="mt-5 sm:mt-8 mx-auto grid grid-cols-2 lg:grid-cols-3 justify-items-center">
-            <a href={`/${locale}/vision`}><CardAboutInno image={imageUrl} text={t('vision')} /></a>
-            <CardAboutInno image={imageUrl} text={t('history')} />
-            <div className="col-span-2 lg:col-span-1"><CardAboutInno image={imageUrl} text={t('goals')} /></div>
+            <a href={`/${locale}/vision`}>
+              <CardAboutInno
+                image1={"https://plus.unsplash.com/premium_photo-1725400826922-39ffcf68f736?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}
+                image2={"https://plus.unsplash.com/premium_photo-1725408006810-53ae337c6efd?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}
+                text={t('vision')} /></a>
+            <CardAboutInno
+              image1={"https://plus.unsplash.com/premium_photo-1681505604092-80fa7e4d02f4?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}
+              image2={"https://plus.unsplash.com/premium_photo-1681505563521-614dba8e7657?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}
+              text={t('history')} />
+            <div className="col-span-2 lg:col-span-1">
+              <CardAboutInno
+                image1={"https://plus.unsplash.com/premium_photo-1663089973327-84d7cdcf8c4b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}
+                image2={"https://plus.unsplash.com/premium_photo-1663076135600-00211f1d3787?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}
+                text={t('goals')} /></div>
           </div>
 
           <h1 className="text-2xl sm:text-4xl text-blue-900 font-bold text-center pt-[2rem]">{t('ourServices')}</h1>
@@ -70,7 +81,7 @@ export default async function Home({ params: { locale } }: { params: { locale: s
                     updatedAt={publicitie.attributes.publishedAt}
                     title={publicitie.attributes.title}
                     thumbnailUrl={`http://localhost:1337${publicitie.attributes.thumbnail.data.attributes.url}`}
-                    pageType="news" 
+                    pageType="news"
                   />
                 ))}
               </div>
