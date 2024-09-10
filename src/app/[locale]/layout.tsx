@@ -23,7 +23,7 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={kanit.className}>
+    <html lang={locale} className={kanit.className} data-theme="light">
       <body>
 
         <NextIntlClientProvider messages={messages}>
