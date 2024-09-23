@@ -4,11 +4,47 @@ import { useLocale, useTranslations } from 'next-intl'
 import LocaleSwitcher from './Locale-Switcher'
 import { useState } from 'react';
 
+interface MenuData {
+    data: {
+        attributes: {
+            personnels: {
+                data: any[];
+            };
+            about_us: {
+                data: any[];
+            };
+            services: {
+                data: any[];
+            };
+        };
+    };
+}
 
+interface LogoData {
+    data: {
+        attributes: {
+            logo: {
+                data: {
+                    attributes: {
+                        url: string;
+                    }
+                }
+            }
+        }
+    }
+}
 
-function Navbar() {
+function Navbar({ menu, logo }: { menu: MenuData, logo: LogoData }) {
     const locale = useLocale()
     const t = useTranslations('navbar')
+    const personnel = menu.data.attributes.personnels.data
+    const aboutUs = menu.data.attributes.about_us.data
+    const services = menu.data.attributes.services.data
+    const logoUrl = logo.data.attributes.logo.data.attributes.url
+
+    const getTextForLocale = (item: any) => {
+        return locale === 'th' ? item.attributes.text_th : item.attributes.text;
+    };
 
     return (
         <div className="navbar bg-white sticky top-0 z-50 shadow-md">
@@ -44,12 +80,15 @@ function Navbar() {
                                                 <details className="dropdown">
                                                     <summary>{t("personnel")}</summary>
                                                     <ul className="p-2 ">
-                                                        <li><a href={`/${locale}/personnel/lecturer`}>{t("lecturer")}</a></li>
-                                                        <li><a href={`/${locale}/personnel/lecturer`}>{t("staff")}</a></li>
+                                                        {personnel.map((data: any) => (
+                                                            <li key={data.id}><a href={`/${locale}/personnel/${data.attributes.slug}`}>{getTextForLocale(data)}</a></li>
+                                                        ))}
                                                     </ul>
                                                 </details>
                                             </li>
-                                            <li><a>Submenu 2</a></li>
+                                            {aboutUs.map((data: any) => (
+                                                <li key={data.id}><a href={`/${locale}/about-us/${data.attributes.slug}`}>{getTextForLocale(data)}</a></li>
+                                            ))}
                                         </ul>
                                     </details>
                                 </li>
@@ -57,8 +96,26 @@ function Navbar() {
                                     <details className="dropdown">
                                         <summary>{t("news")}</summary>
                                         <ul className="p-2 ">
-                                            <li><a href={`/${locale}/event`}>{t("event")}</a></li>
+                                            <li>
+                                                <details className="dropdown">
+                                                    <summary>{t("event")}</summary>
+                                                    <ul className="p-2 ">
+                                                        <li><a href={`/${locale}/event/upcoming-events`}>กิจกรรมที่กำลังจะมาถึง</a></li>
+                                                        <li><a href={`/${locale}/event/pass-events`}>กิจกรรมที่ผ่านไปแล้ว</a></li>
+                                                    </ul>
+                                                </details>
+                                            </li>
                                             <li><a href={`/${locale}/news`}>{t("news1")}</a></li>
+                                        </ul>
+                                    </details>
+                                </li>
+                                <li>
+                                    <details className="dropdown">
+                                        <summary>{t("about")}</summary>
+                                        <ul className="p-2 ">
+                                            {services.map((data: any) => (
+                                                <li key={data.id}><a href={`/${locale}/services/${data.attributes.slug}`}>{getTextForLocale(data)}</a></li>
+                                            ))}
                                         </ul>
                                     </details>
                                 </li>
@@ -66,7 +123,7 @@ function Navbar() {
                             </ul>
                         </div>
                     </div>
-                    <a href={`/${locale}`} className="btn btn-ghost text-xl">InnoSci</a>
+                    <a href={`/${locale}`} className="btn btn-ghost"><img className='h-[50px] object-center' src={`http://localhost:1337${logoUrl}`} alt="" /></a>
                 </div>
             </div>
             <div className="navbar-center hidden lg:flex">
@@ -78,23 +135,56 @@ function Navbar() {
                             <li>
                                 <details className="dropdown">
                                     <summary>{t("personnel")}</summary>
-                                    <ul className="p-2 ">
-                                        <li><a href={`/${locale}/personnel/lecturer`}>{t("lecturer")}</a></li>
-                                        <li><a href={`/${locale}/personnel/staff`}>{t("staff")}</a></li>
+                                    <ul className="p-2">
+                                        {personnel.map((data: any) => (
+                                            <li key={data.id}><a href={`/${locale}/personnel/${data.attributes.slug}`}>{getTextForLocale(data)}</a></li>
+                                        ))}
                                     </ul>
                                 </details>
                             </li>
-                            <li><a>Submenu 2</a></li>
+                            {aboutUs.map((data: any) => (
+                                <li key={data.id}><a href={`/${locale}/about-us/${data.attributes.slug}`}>{getTextForLocale(data)}</a></li>
+                            ))}
                         </ul>
 
                     </div>
                     <div className="dropdown">
                         <div tabIndex={0} role="button" className="btn btn-ghost font-normal">{t("news")}</div>
-                        <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 mt-5 shadow">
-                            <li><a href={`/${locale}/event`}>{t("event")}</a></li>
+                        <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-auto p-2 mt-5 shadow ">
+                            <li>
+                                <details className="dropdown  w-[200px]">
+                                    <summary>{t("event")}</summary>
+                                    <ul className="p-2">
+                                        <li><a href={`/${locale}/event/upcoming-events`}>กิจกรรมที่กำลังจะมาถึง</a></li>
+                                        <li><a href={`/${locale}/event/pass-events`}>กิจกรรมที่ผ่านไปแล้ว</a></li>
+                                    </ul>
+                                </details>
+                            </li>
                             <li><a href={`/${locale}/news`}>{t("news1")}</a></li>
                         </ul>
                     </div>
+                    <div className="dropdown">
+                        <div tabIndex={0} role="button" className="btn btn-ghost font-normal">{t("service")}</div>
+                        <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-auto p-2 mt-5 shadow">
+                            {services.map((service: any) => (
+                                <li key={service.id}>
+                                    <details className="dropdown w-[200px]">
+                                        <summary>{locale === 'th' ? service.attributes.text_th : service.attributes.text}</summary>
+                                        <ul className="p-2">
+                                            {service.attributes.title.map((title: any) => (
+                                                <li key={title.id}>
+                                                    <a href={`/${locale}/services/${service.attributes.slug}/${title.id}`}>
+                                                        {locale === 'th' ? title.text_th : title.text}
+                                                    </a>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </details>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
                     <a role="button" className="btn btn-ghost font-normal" href={`/${locale}/contact`}>{t("contact")}</a>
                 </div>
             </div>

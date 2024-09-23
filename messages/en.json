@@ -28,16 +28,24 @@
     "event": "Event",
     "news": "News",
     "news1": "News",
-    "contact": "Contact us"
+    "contact": "Contact us",
+    "upevent": "Upcoming Events",
+    "passevent": "Past Events",
+    "service": "Services"
   },
   "Event": {
     "home": "Home",
-    "event": "Event",
+    "upevent": "Upcoming Events",
+    "passevent": "Past Events",
     "placeholder": "Search events..."
   },
   "News": {
     "home": "Home",
     "news": "News",
     "placeholder": "Search news..."
+  },
+  "Partner": {
+    "home": "Home",
+    "partner": "Partners"
   }
 }

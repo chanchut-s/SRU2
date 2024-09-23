@@ -5,16 +5,16 @@ import { PaginationComponent } from '@/app/components/custom/Pagination';
 import { getTranslations } from 'next-intl/server';
 import SearchComponent from '@/app/components/custom/Search';
 import { notFound } from 'next/navigation';
-import { getNewsPublicitiesData } from '@/app/api/strapi';
+import { getNewsEventData } from '@/app/api/strapi';
 
 interface NewsData {
   id: number;
   attributes: {
     title: string;
     slug: string;
+    publishedAt: string;
     start: string;
     end: string;
-    publishedAt: string;
     thumbnail: {
       data: {
         attributes: {
@@ -32,8 +32,8 @@ interface SearchParamsProps {
   };
 }
 
-// async function getNewsPublicitiesData(query: string, page: number, pageSize: number) {
-//   const res = await fetch(`http://localhost:1337/api/blog-publicities?populate=*&pagination[page]=${page}&pagination[pageSize]=${pageSize}&filters[title][$contains]=${query}&sort=start:desc`, { next: { revalidate: 60 } })
+// async function getNewsData(query: string, page: number, pageSize: number) {
+//   const res = await fetch(`http://localhost:1337/api/blog-events?populate=*&pagination[page]=${page}&pagination[pageSize]=${pageSize}&filters[title][$contains]=${query}&sort=start:desc`, { next: { revalidate: 60 } })
 //   if (!res.ok) {
 //     throw new Error('Failed to fetch event data')
 //   }
@@ -49,18 +49,20 @@ export default async function NewsPage({
   params: { locale: string };
   searchParams: SearchParamsProps['searchParams'];
 }) {
-  const t = await getTranslations('News');
+  const t = await getTranslations('Event');
   const query = searchParams?.query ?? "";
   const currentPage = Number(searchParams?.page) || 1;
   const pageSize = 9;
 
-  const { data, meta } = await getNewsPublicitiesData(query, currentPage, pageSize);
+  const { data, meta } = await getNewsEventData(query, currentPage, pageSize);
   const pageCount = meta.pagination.pageCount;
 
   if (!data) return notFound();
 
-  const now = new Date()
-  const filteredData = data.filter((news: NewsData) => new Date(news.attributes.start) <= now)
+  const now = new Date();
+
+  // แยกกิจกรรมที่กำลังมาถึง
+  const upcomingEvents = data.filter((event: NewsData) => new Date(event.attributes.start) <= now && new Date(event.attributes.end) >= now);
 
   return (
     <div className='bg-gray-100'>
@@ -69,7 +71,7 @@ export default async function NewsPage({
           <div className="breadcrumbs text-sm text-white">
             <ul>
               <li><a href={`/${locale}`}>{t("home")}</a></li>
-              <li>{t("news")}</li>
+              <li>{t("upevent")}</li>
             </ul>
           </div>
         </div>
@@ -80,11 +82,13 @@ export default async function NewsPage({
         <div className='bg-white relative w-full max-w-screen-xl shadow-xl'>
           <div className='p-[1rem] md:p-[2rem] space-y-4 md:space-y-8'>
             <div className='flex flex-col md:flex-row gap-4 justify-between'>
-              <h1 className='text-3xl sm:text-4xl lg:text-5xl text-blue-900'>{t("news")}</h1>
+              <h1 className='text-3xl sm:text-4xl lg:text-5xl text-blue-900'>{t("upevent")}</h1>
               <SearchComponent initialQuery={query} placeholder={t("placeholder")} />
             </div>
+
+
             <div className='grid grid-cols-1 gap-8 md:gap-14 md:grid-cols-2 lg:grid-cols-3'>
-              {filteredData.map((news: NewsData) => (
+              {upcomingEvents.map((news: NewsData) => (
                 <CardBlogNews
                   key={news.id}
                   id={news.id}
@@ -92,9 +96,8 @@ export default async function NewsPage({
                   thumbnailUrl={news.attributes.thumbnail.data.attributes.url}
                   start={news.attributes.start}
                   end={news.attributes.end}
-                  pageType="news"
+                  pageType="event"
                   slug={news.attributes.slug}
-
                 />
               ))}
             </div>

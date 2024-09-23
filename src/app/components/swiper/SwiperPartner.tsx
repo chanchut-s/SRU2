@@ -9,12 +9,16 @@ import 'swiper/css/navigation';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import CardPartner from '../ui/CardPartner';
 
-function SwiperPartner() {
+interface PartnerPorp {
+    partners: any[]
+}
+
+function SwiperPartner({ partners }: PartnerPorp) {
     return (
         <div className='relative'>
             <Swiper
                 loop={true}
-                
+
                 breakpoints={{
                     600: {
                         slidesPerView: 2
@@ -34,11 +38,19 @@ function SwiperPartner() {
                 modules={[Autoplay, Pagination, Navigation]}
                 className="cardpartner-swiper-container"
             >
+                {partners.map((partner: any) => (
+                    <SwiperSlide key={partner.id}>
+                        <CardPartner
+                            image={`http://localhost:1337${partner.attributes.image.data.attributes.url}`}
+                            url={partner.attributes.url}
+                        />
+                    </SwiperSlide>
+                ))}
+                {/* <SwiperSlide className='p-2'><CardPartner /></SwiperSlide>
                 <SwiperSlide className='p-2'><CardPartner /></SwiperSlide>
                 <SwiperSlide className='p-2'><CardPartner /></SwiperSlide>
                 <SwiperSlide className='p-2'><CardPartner /></SwiperSlide>
-                <SwiperSlide className='p-2'><CardPartner /></SwiperSlide>
-                <SwiperSlide className='p-2'><CardPartner /></SwiperSlide>
+                <SwiperSlide className='p-2'><CardPartner /></SwiperSlide> */}
             </Swiper>
         </div>
     )

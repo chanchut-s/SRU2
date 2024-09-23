@@ -13,7 +13,11 @@ import './swiperProductStyles.css';
 // import required modules
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 
-export default function SwiperProduct() {
+interface ServicesPorp {
+  servives: any[];
+}
+
+export default function SwiperProduct({ servives }: ServicesPorp) {
   return (
     <>
       <Swiper
@@ -37,10 +41,21 @@ export default function SwiperProduct() {
         modules={[Autoplay, Pagination]}
         className="mySwiper"
       >
+        {servives.map((servive: any) => (
+          <SwiperSlide key={servive.id}>
+              <CardProduct
+              image={`http://localhost:1337${servive.attributes.image.data.attributes.url}`}
+              text={servive.attributes.text}
+              text_th={servive.attributes.text_th}
+              slug={servive.attributes.slug}
+              id={servive.attributes.title[0].id}
+              />
+          </SwiperSlide>
+        ))}
+        {/* <SwiperSlide className='p-3'><CardProduct/></SwiperSlide>
         <SwiperSlide className='p-3'><CardProduct/></SwiperSlide>
         <SwiperSlide className='p-3'><CardProduct/></SwiperSlide>
-        <SwiperSlide className='p-3'><CardProduct/></SwiperSlide>
-        <SwiperSlide className='p-3'><CardProduct/></SwiperSlide>
+        <SwiperSlide className='p-3'><CardProduct/></SwiperSlide> */}
         <div className="swiper-pagination"></div>
       </Swiper>
     </>

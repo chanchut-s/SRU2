@@ -6,6 +6,10 @@ import { BlocksRenderer, type BlocksContent } from '@strapi/blocks-react-rendere
 import Link from 'next/link';
 
 const BlockRendererClient = ({ content }: { readonly content: BlocksContent }) => {
+  if (!content || !Array.isArray(content)) {
+    return <p>ไม่มีเนื้อหาที่จะแสดง</p>;
+  }
+
   return (
     <BlocksRenderer
       content={content}

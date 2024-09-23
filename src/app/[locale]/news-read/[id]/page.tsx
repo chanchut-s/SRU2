@@ -3,6 +3,8 @@ import Heading from '@/app/components/custom/Heading'
 import Link from 'next/link'
 import BlockRendererClient from '@/app/components/custom/BlockRendererClient'
 import CardBlogNews from '@/app/components/ui/CardBlogNews'
+import { notFound } from 'next/navigation'
+import { getNewsIdData, getRelatedNews } from '@/app/api/strapi'
 
 interface NewsData {
   id: number;
@@ -12,7 +14,9 @@ interface NewsData {
       type: string;
       children: { type: string; text: string }[];
     }[];
-    updatedAt: string;
+    start: string;
+    publishedAt: string;
+    slug: string;
     thumbnail: {
       data: {
         attributes: {
@@ -22,38 +26,37 @@ interface NewsData {
     }
   }
 }
+// async function getNewsIdData(id: string) {
+//   const res = await fetch(`http://localhost:1337/api/blog-publicities/${id}?populate=*`, { next: { revalidate: 60 } })
+//   if (!res.ok) {
+//     throw new Error('Failed to fetch event data')
+//   }
+//   const data = await res.json();
+//   return data.data;
+// }
 
-async function getNewsData(id: string) {
-  const res = await fetch(`http://localhost:1337/api/blog-publicities/${id}?populate=*`, { next: { revalidate: 60 } })
-  if (!res.ok) {
-    throw new Error('Failed to fetch event data')
-  }
-  return res.json()
-}
+// async function getRelatedNews() {
+//   const res = await fetch('http://localhost:1337/api/blog-publicities?populate=thumbnail&sort=start:desc', { next: { revalidate: 60 } })
+//   if (!res.ok) {
+//     throw new Error('Failed to fetch related events')
+//   }
 
-async function getRelatedNews() {
-  const res = await fetch('http://localhost:1337/api/blog-publicities?populate=*', { next: { revalidate: 60 } })
-  if (!res.ok) {
-    throw new Error('Failed to fetch related events')
-  }
+//   const data = await res.json()
 
-  const data = await res.json()
-
-  // Sorting related events by updated date in descending order
-  data.data.sort((a: NewsData, b: NewsData) => {
-    return new Date(b.attributes.updatedAt).getTime() - new Date(a.attributes.updatedAt).getTime()
-  })
-
-  return data
-}
+//   return data
+// }
 
 
 export default async function NewsRead({ params: { locale, id } }: { params: { locale: string, id: string } }) {
-  const newsData = await getNewsData(id)
+  const newsData = await getNewsIdData(id)
   const relatedNews = await getRelatedNews()
 
-  const news = newsData.data
-  const formattedDate = new Date(news.attributes.updatedAt).toLocaleDateString('th-TH', {
+  if (!newsData) {
+    // จัดการเมื่อไม่พบข้อมูล เช่นแสดงหน้า 404 หรือข้อความแจ้งเตือน
+    return notFound();
+    }
+
+  const formattedDate = new Date(newsData.attributes.start).toLocaleDateString('th-TH', {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
@@ -65,24 +68,24 @@ export default async function NewsRead({ params: { locale, id } }: { params: { l
         <div className="w-full max-w-screen-xl mx-3 sm:mx-10 lg:mx-[4rem]">
           <div className="breadcrumbs text-sm text-white">
             <ul>
-              <li><Link href={`/${locale}`}>หน้าหลัก</Link></li>
-              <li><Link href={`/${locale}/event`}>ประชาสัมพันธ์</Link></li>
-              <li>{news.attributes.title}</li>
+              <li><a href={`/${locale}`}>หน้าหลัก</a></li>
+              <li><a href={`/${locale}/event`}>ประชาสัมพันธ์</a></li>
+              <li>{newsData.attributes.title}</li>
             </ul>
           </div>
         </div>
       </div>
       <Heading imgUrl='https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' />
-      <div className='mx-3 sm:mx-10 lg:mx-[4rem] -mt-[4rem] lg:-mt-[7rem] pb-5'>
+      <div className='flex flex-col justify-center items-center mx-3 sm:mx-10 lg:mx-[4rem] -mt-[4rem] lg:-mt-[7rem] pb-5'>
         <div className='bg-white relative w-full max-w-screen-xl p-5 md:p-10 shadow-xl'>
           <div className=''>
-            <h1 className='text-3xl sm:text-4xl lg:text-5xl text-blue-900 text-center'>{news.attributes.title}</h1>
+            <h1 className='text-3xl sm:text-4xl lg:text-5xl text-blue-900 text-center'>{newsData.attributes.title}</h1>
             <p className='mt-1 text-center font-light'>{formattedDate}</p>
             <div className='my-4 flex justify-center max-w-full object-cover'>
-              <img src={`http://localhost:1337${news.attributes.thumbnail.data.attributes.url}`} alt={news.attributes.title} />
+              <img src={`http://localhost:1337${newsData.attributes.thumbnail.data.attributes.url}`} alt={newsData.attributes.title} />
             </div>
             <div className='prose max-w-none'>
-              <BlockRendererClient content={news.attributes.detail} />
+              <BlockRendererClient content={newsData.attributes.detail} />
             </div>
           </div>
         </div>
@@ -96,8 +99,9 @@ export default async function NewsRead({ params: { locale, id } }: { params: { l
                   id={relatedNewsItem.id}
                   title={relatedNewsItem.attributes.title}
                   thumbnailUrl={relatedNewsItem.attributes.thumbnail.data.attributes.url}
-                  updatedAt={relatedNewsItem.attributes.updatedAt}
+                  start={relatedNewsItem.attributes.start}
                   pageType="news"
+                  slug={relatedNewsItem.attributes.slug}
                 />
               ))}
             </div>
