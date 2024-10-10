@@ -11,7 +11,6 @@ interface CardProfileProps {
 
 function CardProfile({ name, position, image, id }: CardProfileProps ) {
     const locale = useLocale()
-    const t = useTranslations("cardProfile")
     return (
         <Link href={`/${locale}/personnel-cv/${id}`}>
             <div className='group relative block overflow-hidden w-auto max-w-full'>

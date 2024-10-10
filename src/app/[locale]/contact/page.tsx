@@ -1,6 +1,12 @@
 import Heading from '@/app/components/custom/Heading'
+import { Metadata } from 'next'
 import { useLocale } from 'next-intl'
 import React from 'react'
+
+export const metadata: Metadata = {
+  title: "ติดต่อเรา",
+  description: "ติดต่อเรา"
+}
 
 function Contect() {
   const locale = useLocale()

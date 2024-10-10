@@ -3,15 +3,22 @@ import Heading from '@/app/components/custom/Heading'
 import { notFound } from 'next/navigation';
 import React from 'react'
 import { getAboutUsData } from '@/app/api/strapi';
+import AddFileContent from '@/app/components/custom/AddFileContent';
+import { Metadata, ResolvedMetadata } from 'next';
 
-// async function getAboutUsData(slug: string) {
-//     const res = await fetch(`http://localhost:1337/api/about-uses?filters[slug]=${slug}&populate=*`);
-//     if (!res.ok) {
-//         throw new Error('Failed to fetch event data');
-//     }
-//     const data = await res.json();
-//     return data.data
-// }
+export async function generateMetadata({params: {locale, slug}}: {params: {locale: string, slug:string}}, parent: ResolvedMetadata) : Promise<Metadata> {
+    const aboutUs = await getAboutUsData(slug)
+    const title = locale === 'th' ? aboutUs[0].attributes.text_th : aboutUs[0].attributes.text;
+    const previousImages = (await parent).openGraph?.images || []
+    return {
+      title: title,
+      description: "",
+      openGraph: {
+        images: [...previousImages],
+      },
+    };
+  }
+  
 
 export default async function AboutUs({ params: { locale, slug } }: { params: { locale: string, slug: string } }) {
     const aboutUs = await getAboutUsData(slug);
@@ -40,6 +47,7 @@ export default async function AboutUs({ params: { locale, slug } }: { params: { 
                     <div className='space-y-4'>
                         <h1 className='text-3xl sm:text-4xl lg:text-5xl text-blue-900'>{title}</h1>
                         <BlockRendererClient content={aboutUs[0].attributes.detail} />
+                        <AddFileContent addFile={aboutUs[0].attributes.Add_File}/>
                     </div>
                 </div>
             </div>

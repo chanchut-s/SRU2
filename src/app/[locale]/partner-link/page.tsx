@@ -3,6 +3,17 @@ import Link from 'next/link'
 import React from 'react'
 import { getPartnerData } from '@/app/api/strapi'
 import { getTranslations } from 'next-intl/server';
+import { Metadata } from 'next';
+
+export async function generateMetadata() : Promise<Metadata> {
+    const t = await getTranslations('Partner');
+    const title = t('partner')
+    return {
+      title: title,
+      description: "",
+    };
+  }
+
 
 async function PartnerLink({ params: { locale } }: { params: { locale: string } }) {
     const t = await getTranslations('Partner');
@@ -29,7 +40,7 @@ async function PartnerLink({ params: { locale } }: { params: { locale: string } 
                         <h1 className='text-3xl sm:text-4xl lg:text-5xl text-blue-900'>{t('partner')}</h1>
                         {showpartner.map((item: any) => (
                             <div key={item.id} className='grid justify-items-center gap-4'>
-                                <Link href={item.attributes.url || ""}>
+                                <Link href={item.attributes.url || ""} target="_blank">
                                     <img
                                         src={`http://localhost:1337${item.attributes.image.data.attributes.url}`}
                                         alt={item.attributes.name}

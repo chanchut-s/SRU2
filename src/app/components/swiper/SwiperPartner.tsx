@@ -21,13 +21,12 @@ function SwiperPartner({ partners }: PartnerPorp) {
 
                 breakpoints={{
                     600: {
-                        slidesPerView: 2
+                        slidesPerView: 2,
+                        spaceBetween: 20
                     },
-                    740: {
-                        slidesPerView: 3
-                    },
-                    1200: {
-                        slidesPerView: 4
+                    980: {
+                        slidesPerView: 3,
+                        spaceBetween: 30
                     },
                 }}
                 autoplay={{
@@ -39,7 +38,7 @@ function SwiperPartner({ partners }: PartnerPorp) {
                 className="cardpartner-swiper-container"
             >
                 {partners.map((partner: any) => (
-                    <SwiperSlide key={partner.id}>
+                    <SwiperSlide key={partner.id} className='p-2'>
                         <CardPartner
                             image={`http://localhost:1337${partner.attributes.image.data.attributes.url}`}
                             url={partner.attributes.url}

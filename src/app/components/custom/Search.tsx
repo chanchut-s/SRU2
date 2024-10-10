@@ -30,7 +30,7 @@ export default function SearchComponent({ initialQuery, placeholder }: SearchPro
   }, [query, router]);
 
   return (
-    <div className="mb-4">
+    <div className="">
       <div className="flex justify-center">
         <input
           type="text"

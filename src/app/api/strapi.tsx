@@ -1,5 +1,5 @@
 export async function getServicesData(slug: string) {
-    const res = await fetch(`http://localhost:1337/api/services?filters[slug]=${slug}&populate=title.Add_Item.image`, { cache: 'no-store' });
+    const res = await fetch(`http://localhost:1337/api/services?filters[slug]=${slug}&populate=title.Add_Item.image,title.Add_Item.file,title.Add_File.file,title.video`, { cache: 'no-store' });
     if (!res.ok) {
         throw new Error('Failed to fetch service data');
     }
@@ -8,7 +8,7 @@ export async function getServicesData(slug: string) {
 }
 
 export async function getAboutUsData(slug: string) {
-    const res = await fetch(`http://localhost:1337/api/about-uses?filters[slug]=${slug}&populate=*`);
+    const res = await fetch(`http://localhost:1337/api/about-uses?filters[slug]=${slug}&populate=image,Add_File.file`, { cache: 'no-store' });
     if (!res.ok) {
         throw new Error('Failed to fetch event data');
     }
@@ -16,14 +16,42 @@ export async function getAboutUsData(slug: string) {
     return data.data
 }
 
-export async function getNewsEventData(query: string, page: number, pageSize: number) {
-    const res = await fetch(`http://localhost:1337/api/blog-events?populate=*&pagination[page]=${page}&pagination[pageSize]=${pageSize}&filters[title][$contains]=${query}&sort=start:desc`, { next: { revalidate: 60 } });
-    if (!res.ok) {
-        throw new Error('Failed to fetch event data');
+export async function getNewsEventData(
+    query: string,
+    page: number,
+    pageSize: number,
+    startDate: string, 
+    endDate: string
+): Promise<{ data: any; meta: { pagination: { pageCount: number } } }> {
+
+    let url = `http://localhost:1337/api/blog-events?populate=*&pagination[page]=${page}&pagination[pageSize]=${pageSize}&filters[title][$contains]=${query}&sort=start:desc`;
+
+    if (startDate) {
+        url += `&filters[start][$gte]=${startDate}`; 
     }
-    const data = await res.json();
-    return data;
+
+
+    if (endDate) {
+        url += `&filters[start][$lte]=${endDate}`; 
+    }
+
+    try {
+        const res = await fetch(url, { next: { revalidate: 60 } });
+
+        if (!res.ok) {
+            console.error('API response not OK:', res.status, res.statusText);
+            throw new Error(`API response not OK: ${res.status} ${res.statusText}`);
+        }
+
+        const data = await res.json();
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching event data:', error);
+        throw new Error('ไม่สามารถดึงข้อมูลกิจกรรมได้');
+    }
 }
+
 
 export async function getRelatedEvents() {
     const res = await fetch('http://localhost:1337/api/blog-events?populate=thumbnail&sort=start:desc', { next: { revalidate: 60 } })
@@ -36,7 +64,7 @@ export async function getRelatedEvents() {
 }
 
 export async function getEventIdData(id: string) {
-    const res = await fetch(`http://localhost:1337/api/blog-events/${id}?populate=*`);
+    const res = await fetch(`http://localhost:1337/api/blog-events/${id}?populate=Add_File.file,thumbnail,video`, { next: { revalidate: 60 } });
     if (!res.ok) {
         throw new Error('Failed to fetch event data');
     }
@@ -44,18 +72,44 @@ export async function getEventIdData(id: string) {
     return data.data
 }
 
-export async function getNewsPublicitiesData(query: string, page: number, pageSize: number) {
-    const res = await fetch(`http://localhost:1337/api/blog-publicities?populate=*&pagination[page]=${page}&pagination[pageSize]=${pageSize}&filters[title][$contains]=${query}&sort=start:desc`, { next: { revalidate: 60 } })
-    if (!res.ok) {
-        throw new Error('Failed to fetch event data')
+export async function getNewsPublicitiesData(
+    query: string, 
+    page: number, 
+    pageSize: number, 
+    startDate: string, 
+    endDate: string 
+  ): Promise<{ data: any; meta: { pagination: { pageCount: number } } }> {
+    
+    let url = `http://localhost:1337/api/blog-publicities?populate=*&pagination[page]=${page}&pagination[pageSize]=${pageSize}&filters[title][$contains]=${query}&sort=start:desc` ;
+    
+    if (startDate) {
+      url += `&filters[start][$gte]=${startDate}`; 
     }
-    const data = await res.json()
+    
+    if (endDate) {
+      url += `&filters[start][$lte]=${endDate}`;
+    }
 
-    return data
-}
+    try {
+      const res = await fetch(url, { next: { revalidate: 60 } });
+      
+      if (!res.ok) {
+        console.error('API response not OK:', res.status, res.statusText);
+        throw new Error(`API response not OK: ${res.status} ${res.statusText}`);
+      }
+
+      const data = await res.json();
+      return data;
+      
+    } catch (error) {
+      console.error('Error fetching news publicities:', error);
+      throw new Error('ไม่สามารถดึงข้อมูลกิจกรรมได้');
+    }
+  }
+
 
 export async function getNewsIdData(id: string) {
-    const res = await fetch(`http://localhost:1337/api/blog-publicities/${id}?populate=*`, { next: { revalidate: 60 } })
+    const res = await fetch(`http://localhost:1337/api/blog-publicities/${id}?populate=Add_File.file,thumbnail,video`, { next: { revalidate: 60 } })
     if (!res.ok) {
         throw new Error('Failed to fetch event data')
     }
@@ -75,7 +129,7 @@ export async function getRelatedNews() {
 }
 
 export async function getAboutUsHomeData() {
-    const res = await fetch('http://localhost:1337/api/show-about-inno-sci-home?populate=about_us.image1,about_us.image2');
+    const res = await fetch('http://localhost:1337/api/show-about-inno-sci-home?populate=about_us.image1');
     if (!res.ok) {
         throw new Error('Failed to fetch blog data');
     }

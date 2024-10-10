@@ -3,6 +3,7 @@ import CardProfile from '@/app/components/ui/CardProfile';
 import Heading from '@/app/components/custom/Heading';
 import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import { Metadata, ResolvedMetadata } from 'next';
 
 interface Personnel {
   id: number;
@@ -35,6 +36,22 @@ async function fetchPersonnelData() {
   const response = await fetch('http://localhost:1337/api/menu-personnels?populate=blog_personnels.image', { cache: 'no-store' });
   const data = await response.json();
   return data.data as PersonnelPosition[];
+}
+
+export async function generateMetadata({params: {locale, slug}}: {params: {slug:string, locale: string}}, parent: ResolvedMetadata) : Promise<Metadata> {
+  const personnelData = await fetchPersonnelData()
+  const filteredData = personnelData.filter(item => item.attributes.slug === slug);
+  const previousImages = (await parent).openGraph?.images || []
+  const title = locale === 'th'
+    ? filteredData[0]?.attributes.text_th
+    : filteredData[0]?.attributes.text;
+  return {
+    title: title,
+    description: "",
+    openGraph: {
+      images: [...previousImages],
+    },
+  };
 }
 
 export default async function Lecturer({ params: { locale, slug } }: { params: { slug: string, locale: string } }) {

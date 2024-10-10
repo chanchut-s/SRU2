@@ -1,10 +1,11 @@
 import React from 'react'
 import Heading from '@/app/components/custom/Heading'
-import Link from 'next/link'
 import BlockRendererClient from '@/app/components/custom/BlockRendererClient'
 import CardBlogNews from '@/app/components/ui/CardBlogNews'
 import { notFound } from 'next/navigation';
 import { getRelatedEvents, getEventIdData } from '@/app/api/strapi'
+import AddFileContent from '@/app/components/custom/AddFileContent';
+import { Metadata, ResolvedMetadata } from 'next';
 
 interface EventData {
   id: number;
@@ -28,27 +29,29 @@ interface EventData {
   }
 }
 
-// async function getEventData(id: string) {
-//   // http://localhost:1337/api/blog-events?filters[slug]=${slug}&populate=*
-//   const res = await fetch(`http://localhost:1337/api/blog-events/${id}?populate=*`);
-//   if (!res.ok) {
-//     throw new Error('Failed to fetch event data');
-//   }
-//   const data = await res.json();
-//   return data.data
-// }
+function extractTextFromDetail(detail: any[]): string {
+  return detail.map(block => {
+    if (block.type === 'paragraph') {
+      return block.children.map((child: { text: any }) => child.text).join(' ')
+    }
+    return ''
+  }).join(' ').trim().slice(0, 160) + '...'
+}
 
-
-// async function getRelatedEvents() {
-//   const res = await fetch('http://localhost:1337/api/blog-events?populate=thumbnail&sort=start:desc', { next: { revalidate: 60 } })
-//   if (!res.ok) {
-//     throw new Error('Failed to fetch related events')
-//   }
-
-//   const data = await res.json()
-//   return data
-// }
-
+export async function generateMetadata({params: {id}}: {params: {id:string}}, parent: ResolvedMetadata) : Promise<Metadata> {
+  const event = await getEventIdData(id)
+  const previousImages = (await parent).openGraph?.images || []
+  const title = event.attributes.title
+  const description = extractTextFromDetail(event.attributes.detail)
+  const imageUrl = `http://localhost:1337${event.attributes.thumbnail.data?.attributes?.url}`
+  return {
+    title: title,
+    description: "",
+    openGraph: {
+      images: [imageUrl, ...previousImages],
+    },
+  };
+}
 
 export default async function EventRead({ params: { locale, id } }: { params: { locale: string, id: string } }) {
   const event = await getEventIdData(id)
@@ -85,7 +88,7 @@ export default async function EventRead({ params: { locale, id } }: { params: { 
           <div className="breadcrumbs text-sm text-white">
             <ul>
               <li><a href={`/${locale}`}>หน้าหลัก</a></li>
-              <li><a href={`/${locale}/event`}>กิจกรรม</a></li>
+              <li><a href={""}>กิจกรรม</a></li>
               <li>{event.attributes.title}</li>
             </ul>
           </div>
@@ -98,10 +101,30 @@ export default async function EventRead({ params: { locale, id } }: { params: { 
             <h1 className='text-3xl sm:text-4xl lg:text-5xl text-blue-900 text-center'>{event.attributes.title}</h1>
             <p className='mt-1 text-center font-light'>{`${formattedDate} - ${formattedendDate}`}</p>
             <div className='my-4 flex justify-center max-w-full object-cover'>
-              <img src={`http://localhost:1337${event.attributes.thumbnail.data.attributes.url}`} alt={event.attributes.title} />
+              {event.attributes.video?.data ? (
+                <video
+                  src={`http://localhost:1337${event.attributes.video.data.attributes.url}`}
+                  className="w-auto"
+                  controls
+                  autoPlay
+                  muted
+                  loop
+                >
+                  Your browser does not support the video tag.
+                </video>
+              ) : event.attributes.thumbnail?.data?.attributes?.url ? (
+                <img
+                  src={`http://localhost:1337${event.attributes.thumbnail.data.attributes.url}`}
+                  alt={event.attributes.title}
+                  className="w-full"
+                />
+              ) : (
+                []
+              )}
             </div>
             <div className='prose max-w-none'>
               <BlockRendererClient content={event.attributes.detail} />
+              <AddFileContent addFile={event.attributes.Add_File} />
             </div>
           </div>
         </div>
@@ -114,10 +137,10 @@ export default async function EventRead({ params: { locale, id } }: { params: { 
                   key={relatedEvent.id}
                   id={relatedEvent.id}
                   title={relatedEvent.attributes.title}
-                  thumbnailUrl={relatedEvent.attributes.thumbnail.data.attributes.url}
+                  thumbnailUrl={relatedEvent.attributes.thumbnail.data?.attributes?.url}
                   start={relatedEvent.attributes.start}
                   end={relatedEvent.attributes.end}
-                  pageType="event" 
+                  pageType="event"
                   slug={relatedEvent.attributes.slug}
                 />
               ))}

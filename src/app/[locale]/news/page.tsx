@@ -6,6 +6,8 @@ import { getTranslations } from 'next-intl/server';
 import SearchComponent from '@/app/components/custom/Search';
 import { notFound } from 'next/navigation';
 import { getNewsPublicitiesData } from '@/app/api/strapi';
+import DateRangeSearch from '@/app/components/custom/DateRangeSearch';
+import { Metadata } from 'next';
 
 interface NewsData {
   id: number;
@@ -29,18 +31,15 @@ interface SearchParamsProps {
   searchParams?: {
     page?: string;
     query?: string;
+    startDate?: string;
+    endDate?: string;
   };
 }
 
-// async function getNewsPublicitiesData(query: string, page: number, pageSize: number) {
-//   const res = await fetch(`http://localhost:1337/api/blog-publicities?populate=*&pagination[page]=${page}&pagination[pageSize]=${pageSize}&filters[title][$contains]=${query}&sort=start:desc`, { next: { revalidate: 60 } })
-//   if (!res.ok) {
-//     throw new Error('Failed to fetch event data')
-//   }
-//   const data = await res.json()
-
-//   return data
-// }
+export const metadata: Metadata = {
+  title: "ข่าวประชาสัมพันธ์",
+  description: "ข่าวประชาสัมพันธ์"
+}
 
 export default async function NewsPage({
   params: { locale },
@@ -53,14 +52,37 @@ export default async function NewsPage({
   const query = searchParams?.query ?? "";
   const currentPage = Number(searchParams?.page) || 1;
   const pageSize = 9;
+  const startDate = searchParams?.startDate ?? "";
+  const endDate = searchParams?.endDate ?? "";
 
-  const { data, meta } = await getNewsPublicitiesData(query, currentPage, pageSize);
-  const pageCount = meta.pagination.pageCount;
+  let data, meta, error, pageCount;
+  try {
+    // ส่งข้อมูล startDate และ endDate ไปยัง API
+    const result = await getNewsPublicitiesData(query, currentPage, pageSize, startDate, endDate);
+    data = result.data;
+    meta = result.meta;
+    pageCount = meta?.pagination?.pageCount || 1;
+  } catch (e) {
+    console.error('Error fetching news data:', e);
+    error = e instanceof Error ? e.message : 'An unknown error occurred';
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <strong className="font-bold">Error: </strong>
+          <span className="block sm:inline">{error}</span>
+        </div>
+      </div>
+    );
+  }
 
   if (!data) return notFound();
 
-  const now = new Date()
-  const filteredData = data.filter((news: NewsData) => new Date(news.attributes.start) <= now)
+  const now = new Date();
+  // กรองข้อมูลข่าวสารตามวันที่เริ่มต้น
+  const filteredData = data.filter((news: NewsData) => new Date(news.attributes.start) <= now);
 
   return (
     <div className='bg-gray-100'>
@@ -79,9 +101,12 @@ export default async function NewsPage({
       <div className='flex justify-center items-center mx-3 sm:mx-10 lg:mx-[4rem] -mt-[4rem] lg:-mt-[7rem] pb-5'>
         <div className='bg-white relative w-full max-w-screen-xl shadow-xl'>
           <div className='p-[1rem] md:p-[2rem] space-y-4 md:space-y-8'>
-            <div className='flex flex-col md:flex-row gap-4 justify-between'>
+            <div className='flex flex-col  gap-4 justify-between'>
               <h1 className='text-3xl sm:text-4xl lg:text-5xl text-blue-900'>{t("news")}</h1>
-              <SearchComponent initialQuery={query} placeholder={t("placeholder")} />
+              <div className="flex flex-col md:flex-row gap-4 justify-center">
+                <SearchComponent initialQuery={query} placeholder={t("placeholder")} />
+                <DateRangeSearch startDate={startDate} endDate={endDate} />
+              </div>
             </div>
             <div className='grid grid-cols-1 gap-8 md:gap-14 md:grid-cols-2 lg:grid-cols-3'>
               {filteredData.map((news: NewsData) => (
@@ -89,21 +114,20 @@ export default async function NewsPage({
                   key={news.id}
                   id={news.id}
                   title={news.attributes.title}
-                  thumbnailUrl={news.attributes.thumbnail.data.attributes.url}
+                  thumbnailUrl={news.attributes.thumbnail.data?.attributes?.url}
                   start={news.attributes.start}
                   end={news.attributes.end}
                   pageType="news"
                   slug={news.attributes.slug}
-
                 />
               ))}
             </div>
           </div>
           <div className="flex justify-center mb-8">
-            <PaginationComponent pageCount={pageCount} />
+            <PaginationComponent pageCount={pageCount ?? 1} startDate={startDate} endDate={endDate} />
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

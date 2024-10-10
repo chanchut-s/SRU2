@@ -6,6 +6,7 @@ import "./globals.css";
 import Footer from '../components/custom/Footer';
 import { notFound } from 'next/navigation';
 import { getMenuPersonnelData , getLogoData} from '../api/strapi';
+import { Metadata } from 'next';
 
 const kanit = Kanit({
   subsets: ['latin'], // เลือก subset ที่ต้องการ
@@ -20,6 +21,12 @@ const kanit = Kanit({
 //   }
 //   return res.json();
 // }
+
+export const metadata: Metadata = {
+  title: "หน้าแรก",
+  description: "KU InnoSci",
+  keywords: ['KuInnoSci', 'InnoSci', 'Inno']
+}
 
 export default async function LocaleLayout({
   children,
@@ -45,7 +52,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages}>
           <Navbar menu={menupersonnel} logo={Logo}/>
           {children}
-          <Footer/>
+          <Footer menu={menupersonnel} logo={Logo}/>
         </NextIntlClientProvider>
       </body>
     </html>

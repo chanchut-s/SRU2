@@ -1,10 +1,12 @@
 "use client";
 
-import { FC } from "react";
+import React from "react";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 
 interface PaginationProps {
   pageCount: number;
+  startDate: string;
+  endDate: string;
 }
 
 interface PaginationArrowProps {
@@ -13,7 +15,7 @@ interface PaginationArrowProps {
   isDisabled: boolean;
 }
 
-const PaginationArrow: FC<PaginationArrowProps> = ({
+const PaginationArrow: React.FC<PaginationArrowProps> = ({
   direction,
   href,
   isDisabled,
@@ -35,15 +37,21 @@ const PaginationArrow: FC<PaginationArrowProps> = ({
   );
 };
 
-export function PaginationComponent({ pageCount }: Readonly<PaginationProps>) {
+export const PaginationComponent: React.FC<PaginationProps> = ({ pageCount, startDate, endDate }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
 
+  if (pageCount <= 1) {
+    return null; //
+  }
+
   const createPageURL = (pageNumber: number | string) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams.toString());
     params.set("page", pageNumber.toString());
+    if (startDate) params.set("startDate", startDate);
+    if (endDate) params.set("endDate", endDate);
     return `${pathname}?${params.toString()}`;
   };
 
@@ -74,13 +82,13 @@ export function PaginationComponent({ pageCount }: Readonly<PaginationProps>) {
         isDisabled={currentPage <= 1}
       />
       {getPageNumbers().map((page) => (
-         <button
-         key={page}
-         className={`join-item btn-square ${page === currentPage ? "bg-blue-900 text-white" : "bg-white text-gray-700 hover:bg-gray-300"}`}
-         onClick={() => router.push(createPageURL(page))}
-       >
-         {page}
-       </button>
+        <button
+          key={page}
+          className={`join-item btn-square ${page === currentPage ? "bg-blue-900 text-white" : "bg-white text-gray-700 hover:bg-gray-300"}`}
+          onClick={() => router.push(createPageURL(page))}
+        >
+          {page}
+        </button>
       ))}
       <PaginationArrow
         direction="right"
@@ -89,4 +97,4 @@ export function PaginationComponent({ pageCount }: Readonly<PaginationProps>) {
       />
     </div>
   );
-}
+};

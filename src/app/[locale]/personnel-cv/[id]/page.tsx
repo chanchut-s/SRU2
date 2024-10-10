@@ -3,6 +3,7 @@ import { useLocale } from 'next-intl';
 import { notFound } from 'next/navigation';
 import BlockRendererClient from '@/app/components/custom/BlockRendererClient'
 import { getTranslations } from 'next-intl/server';
+import { Metadata, ResolvedMetadata } from 'next';
 
 interface personnelData {
     id: number;
@@ -34,6 +35,21 @@ async function getPersonnelData(id: string) {
     return data.data
 }
 
+export async function generateMetadata({params: {locale, id}}: {params: {id:string, locale: string}}, parent: ResolvedMetadata) : Promise<Metadata> {
+    const personnel = await getPersonnelData(id)
+    const previousImages = (await parent).openGraph?.images || []
+    const title = personnel.attributes.name
+    const description = personnel.attributes.position
+    const imageUrl = `http://localhost:1337${personnel.attributes.image.data.attributes.url}`
+    return {
+      title: title,
+      description: description,
+      openGraph: {
+        images: [imageUrl, ...previousImages],
+      },
+    };
+  }
+
 export default async function PersonnelCV({ params: { locale, id } }: { params: { locale: string, id: string }, searchParams: { jobTitle: string } }) {
     const personnel = await getPersonnelData(id);
     const t = await getTranslations('Partner');
@@ -56,11 +72,11 @@ export default async function PersonnelCV({ params: { locale, id } }: { params: 
             </div>
             <div className='pt-16 mx-3 md:mx-20 flex justify-center items-center'>
                 <div className='flex flex-col gap-[1rem] md:flex-row w-auto md:max-w-screen-xl pb-5'>
-                    <div className='md:mix-w-[420px] w-full px-4'>
+                    <div className='md:w-[420px] w-full px-4'> 
                         <img
                             src={`http://localhost:1337${personnel.attributes.image.data.attributes.url}`}
                             alt=""
-                            className='w-full h-auto object-cover' />
+                            className='w-full object-cover' />
                     </div>
                     <div className='w-full space-y-2'>
                         <h1 className='text-3xl'>{personnel.attributes.name}</h1>
@@ -85,5 +101,6 @@ export default async function PersonnelCV({ params: { locale, id } }: { params: 
                 </div>
             </div>
         </div>
+        
     )
 }

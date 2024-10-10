@@ -26,7 +26,7 @@ const ServiceTitleSwiper: React.FC<ServiceTitleSwiperProps> = ({ titles, locale,
 
     return (
         <Swiper
-            spaceBetween={10}
+            spaceBetween={0}
             slidesPerView={1}
             navigation={true}
             loop={true}
@@ -45,13 +45,15 @@ const ServiceTitleSwiper: React.FC<ServiceTitleSwiperProps> = ({ titles, locale,
                 <SwiperSlide key={item.id}>
                     <div
                         onClick={() => handleTitleClick(item.id)}
-                        className={`cursor-pointer flex justify-center items-center h-[50px] text-center text-2xl
+                        className={`cursor-pointer flex justify-center items-center h-[50px] md:h-[65px] text-center text-lg md:text-xl overflow-hidden my-2 mx-[5px]
                             ${item.id.toString() === selectedId
-                                ? 'text-gray-900 bg-gray-300 '
-                                : 'text-gray-400'
+                                ? 'text-gray-900 bg-white rounded-xl shadow-md border-2 border-blue-900'
+                                : 'text-gray-400 hover:bg-gray-300 rounded-xl hover:text-gray-900'
                             }`}
                     >
-                        {locale === 'th' ? item.text_th : item.text}
+                        <p className="line-clamp-2 px-2">
+                            {locale === 'th' ? item.text_th : item.text}
+                        </p>
                     </div>
                 </SwiperSlide>
             ))}

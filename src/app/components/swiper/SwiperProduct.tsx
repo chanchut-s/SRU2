@@ -42,7 +42,7 @@ export default function SwiperProduct({ servives }: ServicesPorp) {
         className="mySwiper"
       >
         {servives.map((servive: any) => (
-          <SwiperSlide key={servive.id}>
+          <SwiperSlide key={servive.id} className='p-3'>
               <CardProduct
               image={`http://localhost:1337${servive.attributes.image.data.attributes.url}`}
               text={servive.attributes.text}

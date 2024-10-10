@@ -5,6 +5,8 @@ import BlockRendererClient from '@/app/components/custom/BlockRendererClient'
 import CardBlogNews from '@/app/components/ui/CardBlogNews'
 import { notFound } from 'next/navigation'
 import { getNewsIdData, getRelatedNews } from '@/app/api/strapi'
+import AddFileContent from '@/app/components/custom/AddFileContent'
+import { Metadata, ResolvedMetadata } from 'next'
 
 interface NewsData {
   id: number;
@@ -26,26 +28,30 @@ interface NewsData {
     }
   }
 }
-// async function getNewsIdData(id: string) {
-//   const res = await fetch(`http://localhost:1337/api/blog-publicities/${id}?populate=*`, { next: { revalidate: 60 } })
-//   if (!res.ok) {
-//     throw new Error('Failed to fetch event data')
-//   }
-//   const data = await res.json();
-//   return data.data;
-// }
 
-// async function getRelatedNews() {
-//   const res = await fetch('http://localhost:1337/api/blog-publicities?populate=thumbnail&sort=start:desc', { next: { revalidate: 60 } })
-//   if (!res.ok) {
-//     throw new Error('Failed to fetch related events')
-//   }
+function extractTextFromDetail(detail: any[]): string {
+  return detail.map(block => {
+    if (block.type === 'paragraph') {
+      return block.children.map((child: { text: any }) => child.text).join(' ')
+    }
+    return ''
+  }).join(' ').trim().slice(0, 160) + '...'
+}
 
-//   const data = await res.json()
-
-//   return data
-// }
-
+export async function generateMetadata({params: {id}}: {params: {id:string}}, parent: ResolvedMetadata) : Promise<Metadata> {
+  const newsData = await getNewsIdData(id)
+  const previousImages = (await parent).openGraph?.images || []
+  const title = newsData.attributes.title
+  const description = extractTextFromDetail(newsData.attributes.detail)
+  const imageUrl = `http://localhost:1337${newsData.attributes.thumbnail.data?.attributes?.url}`
+  return {
+    title: title,
+    description: "",
+    openGraph: {
+      images: [imageUrl, ...previousImages],
+    },
+  };
+}
 
 export default async function NewsRead({ params: { locale, id } }: { params: { locale: string, id: string } }) {
   const newsData = await getNewsIdData(id)
@@ -54,7 +60,7 @@ export default async function NewsRead({ params: { locale, id } }: { params: { l
   if (!newsData) {
     // จัดการเมื่อไม่พบข้อมูล เช่นแสดงหน้า 404 หรือข้อความแจ้งเตือน
     return notFound();
-    }
+  }
 
   const formattedDate = new Date(newsData.attributes.start).toLocaleDateString('th-TH', {
     year: 'numeric',
@@ -69,7 +75,7 @@ export default async function NewsRead({ params: { locale, id } }: { params: { l
           <div className="breadcrumbs text-sm text-white">
             <ul>
               <li><a href={`/${locale}`}>หน้าหลัก</a></li>
-              <li><a href={`/${locale}/event`}>ประชาสัมพันธ์</a></li>
+              <li><a href={`/${locale}/news`}>ประชาสัมพันธ์</a></li>
               <li>{newsData.attributes.title}</li>
             </ul>
           </div>
@@ -82,10 +88,30 @@ export default async function NewsRead({ params: { locale, id } }: { params: { l
             <h1 className='text-3xl sm:text-4xl lg:text-5xl text-blue-900 text-center'>{newsData.attributes.title}</h1>
             <p className='mt-1 text-center font-light'>{formattedDate}</p>
             <div className='my-4 flex justify-center max-w-full object-cover'>
-              <img src={`http://localhost:1337${newsData.attributes.thumbnail.data.attributes.url}`} alt={newsData.attributes.title} />
+              {newsData.attributes.video?.data ? (
+                <video
+                  src={`http://localhost:1337${newsData.attributes.video.data.attributes.url}`}
+                  className="w-auto"
+                  controls
+                  autoPlay
+                  muted
+                  loop
+                >
+                  Your browser does not support the video tag.
+                </video>
+              ) : newsData.attributes.thumbnail?.data?.attributes?.url ? (
+                <img
+                  src={`http://localhost:1337${newsData.attributes.thumbnail.data.attributes.url}`}
+                  alt={newsData.attributes.title}
+                  className="w-auto"
+                />
+              ) : (
+                []
+              )}
             </div>
             <div className='prose max-w-none'>
               <BlockRendererClient content={newsData.attributes.detail} />
+              <AddFileContent addFile={newsData.attributes.Add_File} />
             </div>
           </div>
         </div>
@@ -98,7 +124,7 @@ export default async function NewsRead({ params: { locale, id } }: { params: { l
                   key={relatedNewsItem.id}
                   id={relatedNewsItem.id}
                   title={relatedNewsItem.attributes.title}
-                  thumbnailUrl={relatedNewsItem.attributes.thumbnail.data.attributes.url}
+                  thumbnailUrl={relatedNewsItem.attributes.thumbnail.data?.attributes?.url}
                   start={relatedNewsItem.attributes.start}
                   pageType="news"
                   slug={relatedNewsItem.attributes.slug}
