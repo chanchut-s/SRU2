@@ -5,8 +5,9 @@ import Navbar from '../components/custom/Navbar';
 import "./globals.css";
 import Footer from '../components/custom/Footer';
 import { notFound } from 'next/navigation';
-import { getMenuPersonnelData , getLogoData} from '../api/strapi';
+import { getMenuPersonnelData, getLogoData } from '../api/strapi';
 import { Metadata } from 'next';
+import Script from 'next/script'; 
 
 const kanit = Kanit({
   subsets: ['latin'], // เลือก subset ที่ต้องการ
@@ -43,16 +44,25 @@ export default async function LocaleLayout({
 
   if (!menupersonnel) {
     return notFound();
-}
+  }
 
   return (
     <html lang={locale} className={kanit.className} data-theme="light">
-      <body>
+      <head>
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-CDLDNSYMMX"></Script>
+        <Script id='google-analytics'>
+          {`window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
 
+          gtag('config', 'G-CDLDNSYMMX');`}
+        </Script>
+      </head>
+      <body>
         <NextIntlClientProvider messages={messages}>
-          <Navbar menu={menupersonnel} logo={Logo}/>
+          <Navbar menu={menupersonnel} logo={Logo} />
           {children}
-          <Footer menu={menupersonnel} logo={Logo}/>
+          <Footer menu={menupersonnel} logo={Logo} />
         </NextIntlClientProvider>
       </body>
     </html>

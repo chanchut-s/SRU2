@@ -189,3 +189,14 @@ export async function getPartnerData() {
     }
     return res.json();
 }
+
+export async function getContact() {
+    const res = await fetch('http://localhost:1337/api/contact?populate=map.image,phone,email,address', { next: { revalidate: 30 } })
+    if (!res.ok) {
+        throw new Error('Failed to fetch related events')
+    }
+
+    const data = await res.json()
+
+    return data
+}
