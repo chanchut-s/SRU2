@@ -70,7 +70,7 @@ export default async function PersonnelCV({ params: { locale, id } }: { params: 
                     </div>
                 </div>
             </div>
-            <div className='pt-16 mx-3 md:mx-20 flex justify-center md:justify-start items-center'>
+            <div className='pt-16 mx-3 md:mx-20 flex justify-center items-center'>
                 <div className='flex flex-col gap-[1rem] md:flex-row md:max-w-screen-xl pb-5'>
                     <div className='md:max-w-[400px] w-full bg-blue-900 my-4'>
                         <img
