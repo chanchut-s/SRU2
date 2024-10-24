@@ -2,6 +2,7 @@ import { getContact } from '@/app/api/strapi'
 import Heading from '@/app/components/custom/Heading'
 import { Metadata } from 'next'
 import { useLocale } from 'next-intl'
+import { getTranslations } from 'next-intl/server'
 import React from 'react'
 
 export const metadata: Metadata = {
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
 }
 
 async function Contect({ params: { locale } }: { params: { locale: string } }) {
+  const t = await getTranslations('navbar')
   const contect = await getContact()
   return (
     <div className='bg-gray-100'>
@@ -17,8 +19,8 @@ async function Contect({ params: { locale } }: { params: { locale: string } }) {
         <div className="w-full max-w-screen-xl mx-3 sm:mx-10 lg:mx-[4rem]">
           <div className="breadcrumbs text-sm text-white">
             <ul>
-              <li><a href={`/${locale}`}>Home</a></li>
-              <li>contact</li>
+              <li><a href={`/${locale}`}>{t('home')}</a></li>
+              <li>{t('contact')}</li>
             </ul>
           </div>
         </div>

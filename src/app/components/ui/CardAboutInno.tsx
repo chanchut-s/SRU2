@@ -17,7 +17,7 @@ function CardAboutInno({ text, text_th, image1, slug }: CardAboutInnoProps) {
   return (
     <Link href={`/${locale}/about-us/${slug}`}>
       <div className="group relative block">
-        <div className="relative flex h-full transform items-end bg-gray-300 transition-transform group-hover:-translate-y-2 duration-500 group-hover:shadow-md group-hover:shadow-gray-700 ">
+        <div className="relative flex h-full transform items-end bg-gray-300 transition-transform group-hover:-translate-y-2 duration-1000 group-hover:shadow-md group-hover:shadow-gray-700">
             <img
               src={image1}
               alt={text}

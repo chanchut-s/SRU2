@@ -63,7 +63,7 @@ export default async function Home({ params: { locale } }: { params: { locale: s
       </div>
       <div className="flex justify-center items-center mx-3 sm:mx-10 lg:mx-[4rem] -mt-[2rem] md:-mt-[4rem] pb-5">
         <div className='bg-white relative p-[1rem] md:p-[2rem] shadow-xl w-full max-w-screen-xl'>
-          <h1 className="text-2xl sm:text-4xl text-blue-900 font-bold text-center pt-[1rem]">{t('aboutInno')}</h1>
+          <h1 className="text-2xl sm:text-4xl text-blue-900 font-bold text-center pt-[1rem] ">{t('aboutInno')}</h1>
           <div className="mt-5 sm:mt-8 grid grid-cols-1 md:grid-cols-3">
             {aboutUs.slice(0, 3).map((about: AboutUs) => (
               <CardAboutInno

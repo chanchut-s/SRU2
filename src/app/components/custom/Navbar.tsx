@@ -100,8 +100,8 @@ function Navbar({ menu, logo }: { menu: MenuData, logo: LogoData }) {
                                                 <details className="dropdown">
                                                     <summary>{t("event")}</summary>
                                                     <ul className="p-2 ">
-                                                        <li><a href={`/${locale}/event/upcoming-events`}>กิจกรรมที่กำลังจะมาถึง</a></li>
-                                                        <li><a href={`/${locale}/event/pass-events`}>กิจกรรมที่ผ่านไปแล้ว</a></li>
+                                                        <li><a href={`/${locale}/event/upcoming-events`}>{t('upevent')}</a></li>
+                                                        <li><a href={`/${locale}/event/pass-events`}>{t('passevent')}</a></li>
                                                     </ul>
                                                 </details>
                                             </li>
@@ -123,7 +123,7 @@ function Navbar({ menu, logo }: { menu: MenuData, logo: LogoData }) {
                             </ul>
                         </div>
                     </div>
-                    <a href={`/${locale}`} className="btn btn-ghost"><img className='h-[50px] object-center' src={`http://localhost:1337${logoUrl}`} alt="" /></a>
+                    <a href={`/${locale}`} className="btn btn-link"><img className='h-[50px] object-center' src={`http://localhost:1337${logoUrl}`} alt="" /></a>
                 </div>
             </div>
             <div className="navbar-center hidden lg:flex">
@@ -155,8 +155,8 @@ function Navbar({ menu, logo }: { menu: MenuData, logo: LogoData }) {
                                 <details className="dropdown  w-[200px]">
                                     <summary>{t("event")}</summary>
                                     <ul className="p-2">
-                                        <li><a href={`/${locale}/event/upcoming-events`}>กิจกรรมที่กำลังจะมาถึง</a></li>
-                                        <li><a href={`/${locale}/event/pass-events`}>กิจกรรมที่ผ่านไปแล้ว</a></li>
+                                        <li><a href={`/${locale}/event/upcoming-events`}>{t('upevent')}</a></li>
+                                        <li><a href={`/${locale}/event/pass-events`}>{t('passevent')}</a></li>
                                     </ul>
                                 </details>
                             </li>

@@ -1,5 +1,5 @@
 export async function getServicesData(slug: string) {
-    const res = await fetch(`http://localhost:1337/api/services?filters[slug]=${slug}&populate=title.Add_Item.image,title.Add_Item.file,title.Add_File.file,title.video`, { cache: 'no-store' });
+    const res = await fetch(`http://localhost:1337/api/services?filters[slug]=${slug}&populate=title.Add_Item.image,title.Add_Item.file,title.Add_File.file,title.video`, { next: { revalidate: 30 } });
     if (!res.ok) {
         throw new Error('Failed to fetch service data');
     }
@@ -8,7 +8,7 @@ export async function getServicesData(slug: string) {
 }
 
 export async function getAboutUsData(slug: string) {
-    const res = await fetch(`http://localhost:1337/api/about-uses?filters[slug]=${slug}&populate=image,Add_File.file`, { cache: 'no-store' });
+    const res = await fetch(`http://localhost:1337/api/about-uses?filters[slug]=${slug}&populate=image,Add_File.file`,{ next: { revalidate: 30 } });
     if (!res.ok) {
         throw new Error('Failed to fetch event data');
     }
@@ -54,7 +54,7 @@ export async function getNewsEventData(
 
 
 export async function getRelatedEvents() {
-    const res = await fetch('http://localhost:1337/api/blog-events?populate=thumbnail&sort=start:desc', { next: { revalidate: 60 } })
+    const res = await fetch('http://localhost:1337/api/blog-events?populate=thumbnail&sort=start:desc', { next: { revalidate: 30 } })
     if (!res.ok) {
         throw new Error('Failed to fetch related events')
     }
@@ -64,7 +64,7 @@ export async function getRelatedEvents() {
 }
 
 export async function getEventIdData(id: string) {
-    const res = await fetch(`http://localhost:1337/api/blog-events/${id}?populate=Add_File.file,thumbnail,video`, { next: { revalidate: 60 } });
+    const res = await fetch(`http://localhost:1337/api/blog-events/${id}?populate=Add_File.file,thumbnail,video`, { next: { revalidate: 30 } });
     if (!res.ok) {
         throw new Error('Failed to fetch event data');
     }
@@ -103,13 +103,13 @@ export async function getNewsPublicitiesData(
       
     } catch (error) {
       console.error('Error fetching news publicities:', error);
-      throw new Error('ไม่สามารถดึงข้อมูลกิจกรรมได้');
+      throw new Error('ไม่สามารถดึงข้อมูลข่าวได้');
     }
   }
 
 
 export async function getNewsIdData(id: string) {
-    const res = await fetch(`http://localhost:1337/api/blog-publicities/${id}?populate=Add_File.file,thumbnail,video`, { next: { revalidate: 60 } })
+    const res = await fetch(`http://localhost:1337/api/blog-publicities/${id}?populate=Add_File.file,thumbnail,video`, { next: { revalidate: 30 } })
     if (!res.ok) {
         throw new Error('Failed to fetch event data')
     }
@@ -118,7 +118,7 @@ export async function getNewsIdData(id: string) {
 }
 
 export async function getRelatedNews() {
-    const res = await fetch('http://localhost:1337/api/blog-publicities?populate=thumbnail&sort=start:desc', { next: { revalidate: 60 } })
+    const res = await fetch('http://localhost:1337/api/blog-publicities?populate=thumbnail&sort=start:desc', { next: { revalidate: 30 } })
     if (!res.ok) {
         throw new Error('Failed to fetch related events')
     }
@@ -147,7 +147,7 @@ export async function getServicesHomeData() {
 }
 
 export async function getBlogData() {
-    const res = await fetch('http://localhost:1337/api/blog-news-home?populate=blog_events.thumbnail,blog_publicities.thumbnail', { next: { revalidate: 60 } });
+    const res = await fetch('http://localhost:1337/api/blog-news-home?populate=blog_events.thumbnail,blog_publicities.thumbnail', { next: { revalidate: 30 } });
     if (!res.ok) {
         throw new Error('Failed to fetch blog data');
     }
@@ -155,7 +155,7 @@ export async function getBlogData() {
 }
 
 export async function getHeroBannerData() {
-    const res = await fetch('http://localhost:1337/api/show-hero-banner?populate=hero_banners.image', { next: { revalidate: 60 } });
+    const res = await fetch('http://localhost:1337/api/show-hero-banner?populate=hero_banners.image', { next: { revalidate: 30 } });
     if (!res.ok) {
         throw new Error('Failed to fetch HeroBanner data');
     }
