@@ -45,11 +45,6 @@ function SwiperPartner({ partners }: PartnerPorp) {
                         />
                     </SwiperSlide>
                 ))}
-                {/* <SwiperSlide className='p-2'><CardPartner /></SwiperSlide>
-                <SwiperSlide className='p-2'><CardPartner /></SwiperSlide>
-                <SwiperSlide className='p-2'><CardPartner /></SwiperSlide>
-                <SwiperSlide className='p-2'><CardPartner /></SwiperSlide>
-                <SwiperSlide className='p-2'><CardPartner /></SwiperSlide> */}
             </Swiper>
         </div>
     )

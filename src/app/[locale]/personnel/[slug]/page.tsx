@@ -71,7 +71,7 @@ export default async function Lecturer({ params: { locale, slug } }: { params: {
   const imgUrl = "https://plus.unsplash.com/premium_photo-1661306465544-cc55151ab336?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
   return (
-    <div className='bg-gray-100'>
+    <div className='min-h-screen bg-gray-100'>
       <div className="flex justify-center items-center absolute bg-black w-full bg-opacity-60">
         <div className="w-full max-w-screen-xl mx-3 sm:mx-10 lg:mx-[4rem]">
           <div className="breadcrumbs text-sm text-white">

@@ -29,7 +29,7 @@ export default async function AboutUs({ params: { locale, slug } }: { params: { 
     const title = locale === 'th' ? aboutUs[0].attributes.text_th : aboutUs[0].attributes.text;
 
     return (
-        <div className='bg-gray-100'>
+        <div className='min-h-screen bg-gray-100'>
             <div className="flex justify-center items-center absolute bg-black w-full bg-opacity-60">
                 <div className="w-full max-w-screen-xl mx-3 sm:mx-10 lg:mx-[4rem]">
                     <div className="breadcrumbs text-sm text-white">

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useRef, useState } from 'react';
-import CardProduct from '../ui/CardProduct';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -12,12 +11,13 @@ import 'swiper/css/navigation';
 import './swiperProductStyles.css';
 // import required modules
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import Link from 'next/link';
 
 interface ServicesPorp {
-  servives: any[];
+  rewards: any[];
 }
 
-export default function SwiperProduct({ servives }: ServicesPorp) {
+export default function SwiperProduct({ rewards }: ServicesPorp) {
   return (
     <>
       <Swiper
@@ -41,21 +41,18 @@ export default function SwiperProduct({ servives }: ServicesPorp) {
         modules={[Autoplay, Pagination]}
         className="mySwiper"
       >
-        {servives.map((servive: any) => (
-          <SwiperSlide key={servive.id} className='p-3'>
-              <CardProduct
-              image={`http://localhost:1337${servive.attributes.image.data.attributes.url}`}
-              text={servive.attributes.text}
-              text_th={servive.attributes.text_th}
-              slug={servive.attributes.slug}
-              id={servive.attributes.title[0].id}
+        {rewards.map((rewards: any) => (
+          <SwiperSlide key={rewards.id} className='p-3'>
+            <a href={rewards.attributes.url} target="_blank">
+              <img
+                className="w-full h-full object-cover object-center hover:scale-110 duration-500"
+                src={`http://localhost:1337${rewards.attributes.image.data.attributes.url}`}
+                alt={"Slider image"}
+                loading="lazy"
               />
+            </a>
           </SwiperSlide>
         ))}
-        {/* <SwiperSlide className='p-3'><CardProduct/></SwiperSlide>
-        <SwiperSlide className='p-3'><CardProduct/></SwiperSlide>
-        <SwiperSlide className='p-3'><CardProduct/></SwiperSlide>
-        <SwiperSlide className='p-3'><CardProduct/></SwiperSlide> */}
         <div className="swiper-pagination"></div>
       </Swiper>
     </>

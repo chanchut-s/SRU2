@@ -137,15 +137,6 @@ export async function getAboutUsHomeData() {
     return data.data.attributes.about_us.data;
 }
 
-export async function getServicesHomeData() {
-    const res = await fetch('http://localhost:1337/api/show-service?populate=services.image,services.title', { cache: 'no-store' });
-    if (!res.ok) {
-        throw new Error('Failed to fetch blog data');
-    }
-    const data = await res.json();
-    return data.data.attributes.services.data;
-}
-
 export async function getBlogData() {
     const res = await fetch('http://localhost:1337/api/blog-news-home?populate=blog_events.thumbnail,blog_publicities.thumbnail', { next: { revalidate: 30 } });
     if (!res.ok) {
@@ -164,7 +155,7 @@ export async function getHeroBannerData() {
 }
 
 export async function getMenuPersonnelData() {
-    const res = await fetch('http://localhost:1337/api/add-menu-personnel?populate=personnels,about_us,services.title');
+    const res = await fetch('http://localhost:1337/api/add-menu-personnel?populate=personnels,about_us');
     if (!res.ok) {
         throw new Error('Failed to fetch menu data');
     }
@@ -199,4 +190,39 @@ export async function getContact() {
     const data = await res.json()
 
     return data
+}
+
+export async function getPublicities() {
+    const res = await fetch('http://localhost:1337/api/blog-publicities?populate=*', { next: { revalidate: 30 } })
+    if (!res.ok) {
+        throw new Error('Failed to fetch related events')
+    }
+
+    const data = await res.json()
+
+    return data
+}
+
+export async function getNewsPin() {
+    const res = await fetch('http://localhost:1337/api/news-pin?populate=blog_publicities.thumbnail', { next: { revalidate: 30 } })
+    if (!res.ok) {
+        throw new Error('Failed to fetch related events')
+    }
+
+    const data = await res.json()
+
+    return data
+    
+}
+
+export async function getReward() {
+    const res = await fetch('http://localhost:1337/api/show-reward?populate=rewards.image', { next: { revalidate: 30 } })
+    if (!res.ok) {
+        throw new Error('Failed to fetch related events')
+    }
+
+    const data = await res.json()
+
+    return data
+    
 }

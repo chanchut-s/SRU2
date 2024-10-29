@@ -85,7 +85,7 @@ export default async function NewsPage({
   const filteredData = data.filter((news: NewsData) => new Date(news.attributes.start) <= now);
 
   return (
-    <div className='bg-gray-100'>
+    <div className='min-h-screen bg-gray-100'>
       <div className="flex justify-center items-center absolute bg-black w-full bg-opacity-60">
         <div className="w-full max-w-screen-xl mx-3 sm:mx-10 lg:mx-[4rem]">
           <div className="breadcrumbs text-sm text-white">

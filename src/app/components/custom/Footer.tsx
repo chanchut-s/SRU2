@@ -35,7 +35,6 @@ function Footer({ menu, logo }: { menu: MenuData, logo: LogoData }) {
     const locale = useLocale()
     const t = useTranslations('navbar')
     const aboutUs = menu.data.attributes.about_us.data
-    const services = menu.data.attributes.services.data
     const logoUrl = logo.data.attributes.logo.data.attributes.url
 
     const getTextForLocale = (item: any) => {
@@ -50,7 +49,7 @@ function Footer({ menu, logo }: { menu: MenuData, logo: LogoData }) {
                         <aside>
                             <div className='flex flex-col md:flex-row gap-10'>
                                 <a href={`/${locale}`}><img className='h-[70px] object-center' src={`http://localhost:1337${logoUrl}`} alt="" /></a>
-                                <div className='grid grid-cols-2 sm:grid-cols-3 gap-10'>
+                                <div className='grid grid-cols-2 gap-10'>
                                     <ul className=' space-y-2'>
                                         <li className=' font-bold'><p>{t("about")}</p></li>
                                         {aboutUs.map((data: any) => (
@@ -63,14 +62,6 @@ function Footer({ menu, logo }: { menu: MenuData, logo: LogoData }) {
                                         <li className=' font-bold'><p>{t('news')}</p></li>
                                         <li className='pl-2'><a href={`/${locale}/event/upcoming-events`} className='hover:underline'><p>{t('event')}</p></a></li>
                                         <li className='pl-2'><a href={`/${locale}/news`} className='hover:underline'><p>{t('news1')}</p></a></li>
-                                    </ul>
-                                    <ul className=' space-y-2'>
-                                        <li className=' font-bold'><p>{t('service')}</p></li>
-                                        {services.map((service: any) => (
-                                            <li key={service.id} className='pl-2'>
-                                                <a href={`/${locale}/services/${service.attributes.slug}/${service.attributes.title[0].id}`} className='hover:underline'>{getTextForLocale(service)}</a>
-                                            </li>
-                                        ))}
                                     </ul>
                                 </div>
                                 <div>
